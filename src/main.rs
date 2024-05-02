@@ -26,6 +26,7 @@ impl Config{
 
 fn args_parse(args: &[String]) -> Config{
     if args[1] == "-h"{
+        println!("There must be 2 arguments");
         println!("arg 1 : file name");
         println!("arg 2 : what you are searching for");
         process::exit(0);
