@@ -1,25 +1,46 @@
 use std::env;
+use std::fs;
 use std::process;
+
 fn main() {
     let args: Vec<String> = env::args().collect(); // Reading CMD line args
     let config: Config = args_parse(&args);
 
     println!("Searching in : {}",config.file_name);
     println!("Searching for : {}",config.token);
- 
+
+    let content: String =  fs::read_to_string(config.file_name).expect("Error reading the file");
+
+    for line in search(&config.token, &content) {
+        println!("{line}");
+    }
+
+    // println!("{:?}", content);
+}
+
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let mut results = Vec::new();
+
+    for line in contents.lines() {
+        if line.contains(query) {
+            results.push(line);
+        }
+    }
+
+    results
 }
 
 struct Config {
     file_name: String,
-    token : String,
+    token: String,
 }
 
 impl Config{
     fn new(args: &[String]) -> Config{
         
         Config{
-            file_name : args[1].clone(),
-            token : args[2].clone(),
+            file_name: args[1].clone(),
+            token: args[2].clone(),
         }
     }
 }
